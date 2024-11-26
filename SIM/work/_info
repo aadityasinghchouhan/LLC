@@ -1,0 +1,230 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dD:/PSU/MSD - ECE585/Final Project/SV/11192024/SIM
+vcache
+Z1 DXx6 sv_std 3 std 0 22 WmjPaeP=7F5?QFXzJ>D[Q2
+Z2 DXx4 work 16 cache_struct_pkg 0 22 M:2=g>J5gRACX=Jb48j_k3
+Z3 DXx4 work 9 trace_pkg 0 22 GJ@V]aaZCS9UjC>3XBVOb3
+DXx4 work 13 cache_sv_unit 0 22 @LiW^KcieKljBDieFCC1K2
+Z4 VDg1SIo80bB@j0V0VzS_@n1
+r1
+!s85 0
+31
+!i10b 1
+!s100 <ZnPj@l36H>Y5hI4>7:U30
+IVL^bo:jo<_g3jWAXWTJKI0
+!s105 cache_sv_unit
+S1
+R0
+Z5 w1732403308
+Z6 8../TB/cache.sv
+Z7 F../TB/cache.sv
+L0 8
+Z8 OL;L;10.4e;61
+Z9 !s108 1732403458.000000
+Z10 !s107 ..\PKG\defines.sv|../TB/cache.sv|../PKG/trace_pkg.sv|../PKG/defines.sv|../PKG/cache_struct_pkg.sv|
+Z11 !s90 -coveropt|3|+acc|+cover|../PKG/cache_struct_pkg.sv|../PKG/defines.sv|../PKG/trace_pkg.sv|../TB/cache.sv|
+!i113 0
+Z12 !s102 -coveropt 3 +cover
+Z13 o-coveropt 3 +acc +cover -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+Xcache_struct_pkg
+R1
+VM:2=g>J5gRACX=Jb48j_k3
+r1
+!s85 0
+31
+!i10b 1
+!s100 BmY:WFb8KVUbjClW?Y6f12
+IM:2=g>J5gRACX=Jb48j_k3
+S1
+R0
+w1732402963
+Z14 8../PKG/cache_struct_pkg.sv
+Z15 F../PKG/cache_struct_pkg.sv
+L0 3
+R8
+R9
+R10
+R11
+!i113 0
+R12
+R13
+Xcache_struct_pkg_sv_unit
+R1
+DXx4 work 9 trace_pkg 0 22 Ti:o?b;FRVGGDi[kj1JK12
+!i10b 1
+!s100 Nf[F1Co_gnlf`Nf:47zRn3
+Iei9]7zMZn>nV5fKeM]G:]3
+Vei9]7zMZn>nV5fKeM]G:]3
+!i103 1
+S1
+R0
+w1732392902
+R14
+R15
+Z16 F..\PKG\defines.sv
+L0 2
+R8
+!s108 1732392934.000000
+R10
+R11
+!i113 0
+R12
+R13
+Xcache_sv_unit
+R1
+R2
+R3
+V@LiW^KcieKljBDieFCC1K2
+r1
+!s85 0
+31
+!i10b 1
+!s100 XLOIzA^`2eM4HIUn>UbLl3
+I@LiW^KcieKljBDieFCC1K2
+!i103 1
+S1
+R0
+R5
+R6
+R7
+Z17 F../PKG/defines.sv
+L0 5
+R8
+R9
+R10
+R11
+!i113 0
+R12
+R13
+vcache_tb
+R1
+Z18 DXx4 work 9 trace_pkg 0 22 2a[9ngVag3NegJMF;cK=U3
+Z19 DXx4 work 16 cache_struct_pkg 0 22 R7iPiLa>8B0j;^UR:HAhc0
+DXx4 work 16 cache_tb_sv_unit 0 22 29k16aSNOS8@94z`@=7782
+R4
+r1
+!s85 0
+31
+!i10b 1
+!s100 oDG69_TlRedz5V[=N:b6m3
+IKz;AncLbS<R3bLI:zGc4h0
+!s105 cache_tb_sv_unit
+S1
+R0
+w1732007141
+Z20 8../TB/cache_tb.sv
+Z21 F../TB/cache_tb.sv
+L0 8
+R8
+Z22 !s108 1732150264.000000
+Z23 !s107 ..\PKG\defines.sv|../TB/cache_tb.sv|../PKG/trace_pkg.sv|../PKG/defines.sv|../PKG/cache_struct_pkg.sv|
+Z24 !s90 -coveropt|3|+acc|+cover|../PKG/cache_struct_pkg.sv|../PKG/defines.sv|../PKG/trace_pkg.sv|../TB/cache_tb.sv|
+!i113 0
+R12
+R13
+Xcache_tb_sv_unit
+R1
+R18
+R19
+V29k16aSNOS8@94z`@=7782
+r1
+!s85 0
+31
+!i10b 1
+!s100 4<>iV3?8KzY7mJTM3YE4l2
+I29k16aSNOS8@94z`@=7782
+!i103 1
+S1
+R0
+w1732150111
+R20
+R21
+R17
+L0 5
+R8
+R22
+R23
+R24
+!i113 0
+R12
+R13
+vdefines
+R1
+!s110 1731998138
+!i10b 1
+!s100 DfG;HH0F;`:IKh:n7zZ6A0
+I<1jZ:NHO;Q1R5R_oR_4lK3
+R4
+!s105 trace_pkg_sv_unit
+S1
+R0
+w1731996342
+8..\PKG\defines.sv
+R16
+L0 19
+R8
+r1
+!s85 0
+31
+!s108 1731998138.000000
+R23
+R24
+!i113 0
+R12
+R13
+Xtrace_pkg
+R1
+R2
+VGJ@V]aaZCS9UjC>3XBVOb3
+r1
+!s85 0
+31
+!i10b 1
+!s100 Jc6]<le[94LT<0:k:`Nz01
+IGJ@V]aaZCS9UjC>3XBVOb3
+S1
+R0
+w1732393053
+Z25 8../PKG/trace_pkg.sv
+Z26 F../PKG/trace_pkg.sv
+L0 4
+R8
+R9
+R10
+R11
+!i113 0
+R12
+R13
+Xtrace_pkg_sv_unit
+R1
+DXx4 work 16 cache_struct_pkg 0 22 jn8g>6K`;bzaQi>4]<lBl0
+V9Nd5[[Hz?WnC;3nRXf@aD0
+r1
+!s85 0
+31
+!i10b 1
+!s100 CDzOOA5O4AoN_oMkZT^kX2
+I9Nd5[[Hz?WnC;3nRXf@aD0
+!i103 1
+S1
+R0
+w1732392871
+R25
+R26
+R16
+L0 2
+R8
+!s108 1732392872.000000
+R10
+R11
+!i113 0
+R12
+R13

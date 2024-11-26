@@ -1,0 +1,752 @@
+# vsim -coverage -novopt cache -sv_seed random -c -do "run -all; exit" "+TRACE_FILE=input.txt" "+DEBUG_MODE=1" "+VERBOSITY=2" 
+# Start time: 15:11:00 on Nov 23,2024
+# ** Warning: (vsim-8891) All optimizations are turned off because the -novopt switch is in effect. This will cause your simulation to run very slowly. If you are using this switch to preserve visibility for Debug or PLI features please see the User's Manual section on Preserving Object Visibility with vopt.
+# 
+# //  Questa Sim-64
+# //  Version 10.4e win64 Apr  9 2016
+# //
+# //  Copyright 1991-2016 Mentor Graphics Corporation
+# //  All Rights Reserved.
+# //
+# //  THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+# //  WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION OR ITS
+# //  LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+# //  THIS DOCUMENT CONTAINS TRADE SECRETS AND COMMERCIAL OR FINANCIAL
+# //  INFORMATION THAT ARE PRIVILEGED, CONFIDENTIAL, AND EXEMPT FROM
+# //  DISCLOSURE UNDER THE FREEDOM OF INFORMATION ACT, 5 U.S.C. SECTION 552.
+# //  FURTHERMORE, THIS INFORMATION IS PROHIBITED FROM DISCLOSURE UNDER
+# //  THE TRADE SECRETS ACT, 18 U.S.C. SECTION 1905.
+# //
+# Refreshing D:/PSU/MSD - ECE585/Final Project/SV/11192024/SIM/work.cache
+# Refreshing D:/PSU/MSD - ECE585/Final Project/SV/11192024/SIM/work.cache_sv_unit
+# Refreshing D:/PSU/MSD - ECE585/Final Project/SV/11192024/SIM/work.trace_pkg
+# Refreshing D:/PSU/MSD - ECE585/Final Project/SV/11192024/SIM/work.cache_struct_pkg
+# Loading sv_std.std
+# Loading work.cache_struct_pkg
+# Loading work.trace_pkg
+# Loading work.cache_sv_unit
+# Loading work.cache
+# ** Warning: (vsim-PLI-3691) ../TB/cache.sv(110): Expected a system task, not a system function '$fscanf'.
+#    Time: 0 ps  Iteration: 0  Instance: /cache File: ../TB/cache.sv
+# Sv_Seed = 2733383406
+# run -all
+# ---------------------- SUMMARY OF GIVEN/CALCULATED DATA ----------------------
+# CACHE_CAPACITY                : 01000000 (Hex), 16777216 (Dec)
+# PHYSICAL_ADDR_BITS            : 00000020 (Hex), 32 (Dec)
+# BYTE_OFFSET                   : 00000040 (Hex), 64 (Dec)
+# BYTE_OFFSET_BITS              : 00000006 (Hex), 6 (Dec)
+# NUM_OF_WAYS_OF_ASSOCIATIVITY  : 00000010 (Hex), 16 (Dec)
+# NUM_OF_CACHE_LINES            : 00040000 (Hex), 262144 (Dec)
+# NUM_OF_SETS                   : 00004000 (Hex), 16384 (Dec)
+# NUM_OF_CACHE_LINES_PER_SET    : 00000010 (Hex), 16 (Dec)
+# NUM_OF_SETS_BITS              : 0000000e (Hex), 14 (Dec)
+# TAG_BITS                      : 0000000c (Hex), 12 (Dec)
+# PLRU_BITS                     : 0000000f (Hex), 15 (Dec)
+# -----------------------------------------------------------------------------
+# Verbosity is set to: 2
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 00019d94 at CACHE_MEM [SET=1654][WAY=0]
+# cache_mem[1654].cache_line[0].valid = 1
+# cache_mem[1654].cache_line[0].tag = 0 = 0
+# w = 0
+# index = 1
+# index = 3
+# index = 7
+# index = 7
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 0
+# Updated_PLRU[9] = 0
+# Updated_PLRU[8] = 0
+# Updated_PLRU[7] = 0
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 0
+# Updated_PLRU[3] = 0
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 0
+# PLRU = 000000000000000
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 10019d94 at CACHE_MEM [SET=1654][WAY=1]
+# cache_mem[1654].cache_line[1].valid = 1
+# cache_mem[1654].cache_line[1].tag = 100 = 100
+# w = 1
+# index = 1
+# index = 3
+# index = 7
+# index = 7
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 0
+# Updated_PLRU[9] = 0
+# Updated_PLRU[8] = 0
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 0
+# Updated_PLRU[3] = 0
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 0
+# PLRU = 000000010000000
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 20019d94 at CACHE_MEM [SET=1654][WAY=2]
+# cache_mem[1654].cache_line[2].valid = 1
+# cache_mem[1654].cache_line[2].tag = 200 = 200
+# w = 2
+# index = 1
+# index = 3
+# index = 8
+# index = 8
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 0
+# Updated_PLRU[9] = 0
+# Updated_PLRU[8] = 0
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 0
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 0
+# PLRU = 000000010001000
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 30019d94 at CACHE_MEM [SET=1654][WAY=3]
+# cache_mem[1654].cache_line[3].valid = 1
+# cache_mem[1654].cache_line[3].tag = 300 = 300
+# w = 3
+# index = 1
+# index = 3
+# index = 8
+# index = 8
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 0
+# Updated_PLRU[9] = 0
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 0
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 0
+# PLRU = 000000110001000
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 40019d94 at CACHE_MEM [SET=1654][WAY=4]
+# cache_mem[1654].cache_line[4].valid = 1
+# cache_mem[1654].cache_line[4].tag = 400 = 400
+# w = 4
+# index = 1
+# index = 4
+# index = 9
+# index = 9
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 0
+# Updated_PLRU[9] = 0
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 0
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 0
+# PLRU = 000000110001010
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 50019d94 at CACHE_MEM [SET=1654][WAY=5]
+# cache_mem[1654].cache_line[5].valid = 1
+# cache_mem[1654].cache_line[5].tag = 500 = 500
+# w = 5
+# index = 1
+# index = 4
+# index = 9
+# index = 9
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 0
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 0
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 0
+# PLRU = 000001110001010
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 60019d94 at CACHE_MEM [SET=1654][WAY=6]
+# cache_mem[1654].cache_line[6].valid = 1
+# cache_mem[1654].cache_line[6].tag = 600 = 600
+# w = 6
+# index = 1
+# index = 4
+# index = 10
+# index = 10
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 0
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 0
+# PLRU = 000001110011010
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 70019d94 at CACHE_MEM [SET=1654][WAY=7]
+# cache_mem[1654].cache_line[7].valid = 1
+# cache_mem[1654].cache_line[7].tag = 700 = 700
+# w = 7
+# index = 1
+# index = 4
+# index = 10
+# index = 10
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 0
+# PLRU = 000011110011010
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 80019d94 at CACHE_MEM [SET=1654][WAY=8]
+# cache_mem[1654].cache_line[8].valid = 1
+# cache_mem[1654].cache_line[8].tag = 800 = 800
+# w = 8
+# index = 2
+# index = 5
+# index = 11
+# index = 11
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 000011110011011
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for 90019d94 at CACHE_MEM [SET=1654][WAY=9]
+# cache_mem[1654].cache_line[9].valid = 1
+# cache_mem[1654].cache_line[9].tag = 900 = 900
+# w = 9
+# index = 2
+# index = 5
+# index = 11
+# index = 11
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 000111110011011
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for a0019d94 at CACHE_MEM [SET=1654][WAY=10]
+# cache_mem[1654].cache_line[10].valid = 1
+# cache_mem[1654].cache_line[10].tag = a00 = a00
+# w = 10
+# index = 2
+# index = 5
+# index = 12
+# index = 12
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 000111110111011
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for b0019d94 at CACHE_MEM [SET=1654][WAY=11]
+# cache_mem[1654].cache_line[11].valid = 1
+# cache_mem[1654].cache_line[11].tag = b00 = b00
+# w = 11
+# index = 2
+# index = 5
+# index = 12
+# index = 12
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 001111110111011
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for c0019d94 at CACHE_MEM [SET=1654][WAY=12]
+# cache_mem[1654].cache_line[12].valid = 1
+# cache_mem[1654].cache_line[12].tag = c00 = c00
+# w = 12
+# index = 2
+# index = 6
+# index = 13
+# index = 13
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 001111110111111
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for d0019d94 at CACHE_MEM [SET=1654][WAY=13]
+# cache_mem[1654].cache_line[13].valid = 1
+# cache_mem[1654].cache_line[13].tag = d00 = d00
+# w = 13
+# index = 2
+# index = 6
+# index = 13
+# index = 13
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 1
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 011111110111111
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for e0019d94 at CACHE_MEM [SET=1654][WAY=14]
+# cache_mem[1654].cache_line[14].valid = 1
+# cache_mem[1654].cache_line[14].tag = e00 = e00
+# w = 14
+# index = 2
+# index = 6
+# index = 14
+# index = 14
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 1
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 1
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 011111111111111
+# -----------------------------------------------------------------------------------
+# 
+# 
+# COMPULSORY READ-MISS for f0019d94 at CACHE_MEM [SET=1654][WAY=15]
+# cache_mem[1654].cache_line[15].valid = 1
+# cache_mem[1654].cache_line[15].tag = f00 = f00
+# w = 15
+# index = 2
+# index = 6
+# index = 14
+# index = 14
+# Updated_PLRU[14] = 1
+# Updated_PLRU[13] = 1
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 1
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 111111111111111
+# -----------------------------------------------------------------------------------
+# 
+# 
+# TAG MATCHED! e00 = e00
+# 2 - READ-HIT for e0019d94 at CACHE_MEM [SET=1654][WAY=14]
+# w = 14
+# index = 2
+# index = 6
+# index = 14
+# index = 14
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 1
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 1
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 011111111111111
+# -----------------------------------------------------------------------------------
+# 
+# 
+# TAG MATCHED! d00 = d00
+# 2 - READ-HIT for d0019d94 at CACHE_MEM [SET=1654][WAY=13]
+# w = 13
+# index = 2
+# index = 6
+# index = 13
+# index = 13
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 1
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 011111110111111
+# -----------------------------------------------------------------------------------
+# 
+# 
+# TAG MATCHED! c00 = c00
+# 2 - READ-HIT for c0019d94 at CACHE_MEM [SET=1654][WAY=12]
+# w = 12
+# index = 2
+# index = 6
+# index = 13
+# index = 13
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 001111110111111
+# -----------------------------------------------------------------------------------
+# 
+# 
+# TAG MATCHED! b00 = b00
+# 2 - READ-HIT for b0019d94 at CACHE_MEM [SET=1654][WAY=11]
+# w = 11
+# index = 2
+# index = 5
+# index = 12
+# index = 12
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 1
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 001111110111011
+# -----------------------------------------------------------------------------------
+# 
+# 
+# TAG MATCHED! a00 = a00
+# 2 - READ-HIT for a0019d94 at CACHE_MEM [SET=1654][WAY=10]
+# w = 10
+# index = 2
+# index = 5
+# index = 12
+# index = 12
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 1
+# Updated_PLRU[0] = 1
+# PLRU = 000111110111011
+# -----------------------------------------------------------------------------------
+# 
+# CONFLICT READ-MISS for 16019d94 at CACHE_MEM [SET=1654][WAY=0]
+# 
+# Initial - 0 
+# way_out = 0
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 1
+# Updated_PLRU[7] = 0
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 0
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 0
+# -----------------------------------------------------------------------------------
+# 
+# 
+# TAG MATCHED! 200 = 200
+# 2 - READ-HIT for 20019d94 at CACHE_MEM [SET=1654][WAY=2]
+# w = 2
+# index = 1
+# index = 3
+# index = 8
+# index = 8
+# Updated_PLRU[14] = 0
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 0
+# Updated_PLRU[7] = 0
+# Updated_PLRU[6] = 0
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 0
+# PLRU = 000111000111000
+# -----------------------------------------------------------------------------------
+# 
+# CONFLICT READ-MISS for 15019d94 at CACHE_MEM [SET=1654][WAY=0]
+# 
+# Initial - 1 
+# way_out = 15
+# Updated_PLRU[14] = 1
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 0
+# Updated_PLRU[7] = 0
+# Updated_PLRU[6] = 1
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 1
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 1
+# -----------------------------------------------------------------------------------
+# 
+# 
+# TAG MATCHED! 100 = 100
+# 2 - READ-HIT for 10019d94 at CACHE_MEM [SET=1654][WAY=1]
+# w = 1
+# index = 1
+# index = 3
+# index = 7
+# index = 7
+# Updated_PLRU[14] = 1
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 1
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 0
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 1
+# Updated_PLRU[5] = 1
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 0
+# Updated_PLRU[2] = 1
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 0
+# PLRU = 100111011110100
+# -----------------------------------------------------------------------------------
+# 
+# CONFLICT READ-MISS for 00019d94 at CACHE_MEM [SET=1654][WAY=0]
+# 
+# Initial - 1 
+# way_out = 8
+# Updated_PLRU[14] = 1
+# Updated_PLRU[13] = 0
+# Updated_PLRU[12] = 0
+# Updated_PLRU[11] = 0
+# Updated_PLRU[10] = 1
+# Updated_PLRU[9] = 1
+# Updated_PLRU[8] = 0
+# Updated_PLRU[7] = 1
+# Updated_PLRU[6] = 1
+# Updated_PLRU[5] = 0
+# Updated_PLRU[4] = 1
+# Updated_PLRU[3] = 0
+# Updated_PLRU[2] = 0
+# Updated_PLRU[1] = 0
+# Updated_PLRU[0] = 1
+#  exit
+# ------------------CACHE_MEM [SET][WAY] = [TAG BITS][MESI STATE]--------------------
+# CACHE_MEM [1654][0] = [160][INVALID]
+# CACHE_MEM [1654][1] = [100][INVALID]
+# CACHE_MEM [1654][2] = [200][INVALID]
+# CACHE_MEM [1654][3] = [300][INVALID]
+# CACHE_MEM [1654][4] = [400][INVALID]
+# CACHE_MEM [1654][5] = [500][INVALID]
+# CACHE_MEM [1654][6] = [600][INVALID]
+# CACHE_MEM [1654][7] = [700][INVALID]
+# CACHE_MEM [1654][8] = [0][INVALID]
+# CACHE_MEM [1654][9] = [900][INVALID]
+# CACHE_MEM [1654][10] = [a00][INVALID]
+# CACHE_MEM [1654][11] = [b00][INVALID]
+# CACHE_MEM [1654][12] = [c00][INVALID]
+# CACHE_MEM [1654][13] = [d00][INVALID]
+# CACHE_MEM [1654][14] = [e00][INVALID]
+# CACHE_MEM [1654][15] = [150][INVALID]
+# -------------------------------------------------------------------
+#                             SUMMARY                                
+# -------------------------------------------------------------------
+# NUMBER OF CACHE READS	 = 23
+# NUMBER OF CACHE WRITES = 0
+# NUMBER OF CACHE HITS	 = 7
+# NUMBER OF CACHE MISSES = 16
+# CACHE HIT RATIO	 = 0.30 %
+# -------------------------------------------------------------------
+# End time: 15:11:02 on Nov 23,2024, Elapsed time: 0:00:02
+# Errors: 0, Warnings: 2
