@@ -1,6 +1,5 @@
 `include "defines.sv"
 
-
 package trace_pkg;
 
     import cache_struct_pkg::*;
@@ -53,7 +52,7 @@ package trace_pkg;
         display_val(FULL, $sformatf("byte_offset = %0d (Dec) , %b (Bin)", byte_offset, byte_offset));
         display_val(FULL, $sformatf("set_val = %0d (Dec) , %b (Bin)", set_val, set_val));
         display_val(FULL, $sformatf("tag_val = %0d (Dec) , %b (Bin)", tag_val, tag_val));
-        display_val(FULL, "-----------------------------------------------------------------------------------------\n");
+        display_val(FULL, "-----------------------------------------------------------------------------------");
     endfunction: address_slicing
 
 endpackage: trace_pkg

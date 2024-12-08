@@ -1,10 +1,12 @@
 `define TRACE_CMD_LEN 4
+`define INTERVAL 10
 
 //Given informations
 `define CACHE_CAPACITY 2**24               //Capacity 2**24
 `define BYTE_OFFSET 64
 `define NUM_OF_WAYS_OF_ASSOCIATIVITY 16
 `define PHYSICAL_ADDR_BITS 32
+`define COUNTER_BITS 16
 
 //Calculated informations
 `define BYTE_OFFSET_BITS $clog2(`BYTE_OFFSET)
@@ -14,4 +16,3 @@
 `define NUM_OF_SETS_BITS $clog2(`NUM_OF_SETS)
 `define TAG_BITS (`PHYSICAL_ADDR_BITS-`NUM_OF_SETS_BITS-`BYTE_OFFSET_BITS)
 `define PLRU_BITS (`NUM_OF_WAYS_OF_ASSOCIATIVITY-1)
-`define COUNTER_BITS 16
