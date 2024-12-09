@@ -6,7 +6,6 @@
 `define BYTE_OFFSET 64
 `define NUM_OF_WAYS_OF_ASSOCIATIVITY 16
 `define PHYSICAL_ADDR_BITS 32
-`define COUNTER_BITS 16
 
 //Calculated informations
 `define BYTE_OFFSET_BITS $clog2(`BYTE_OFFSET)

@@ -5,8 +5,8 @@ package trace_pkg;
     import cache_struct_pkg::*;
 
     //Trace file input value variable
-    bit [`TRACE_CMD_LEN-1:0] cmd;
-    bit [`PHYSICAL_ADDR_BITS-1:0] address;
+    logic [`TRACE_CMD_LEN-1:0] cmd;
+    logic [`PHYSICAL_ADDR_BITS-1:0] address;
     string cmd_description = "";
 
     //Cache calculation variables
@@ -47,6 +47,7 @@ package trace_pkg;
 
     function void address_slicing (bit [`PHYSICAL_ADDR_BITS-1:0] physical_addr);
         physical_addr = physical_addr;
+        get_snoop_result(physical_addr, snoop_result);
         {tag_val, set_val, byte_offset} = physical_addr;
         display_val(FULL, $sformatf("physical_address = %h (Hex) , %b (Bin)", physical_addr, physical_addr));
         display_val(FULL, $sformatf("byte_offset = %0d (Dec) , %b (Bin)", byte_offset, byte_offset));

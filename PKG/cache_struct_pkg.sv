@@ -3,10 +3,10 @@
 package cache_struct_pkg;
 
     //Counter variables
-    bit [`COUNTER_BITS-1:0] cache_read_cnt;
-    bit [`COUNTER_BITS-1:0] cache_write_cnt;
-    bit [`COUNTER_BITS-1:0] cache_hit_cnt;
-    bit [`COUNTER_BITS-1:0] cache_miss_cnt;
+    real cache_read_cnt;
+    real cache_write_cnt;
+    real cache_hit_cnt;
+    real cache_miss_cnt;
     real cache_hit_ratio;
 
     //PLRU bit-array declaration (Dynamic array)
@@ -33,14 +33,16 @@ package cache_struct_pkg;
 
     //One-cache line contains: Valid bit, Dirty bit, Tag bit, MESI State
     //Let's declare user-defined structure for one cache line
-    typedef struct {logic valid;
-                    logic dirty;
+    typedef struct {logic dirty;
                     mesi_states_e mesi_state;
                     logic [`TAG_BITS-1:0] tag;} cache_line_st;
 
     //One-set contains: (16-1)=15 PLRU bits, 16 cache-lines 
     typedef struct {logic [`PLRU_BITS-1:0] plru_bits;
                     cache_line_st cache_line [`NUM_OF_WAYS_OF_ASSOCIATIVITY-1:0];} cache_set_st [`NUM_OF_SETS];
+
+    //Declare cache memory
+    cache_set_st cache_mem;
 
     //Snoop Result Enumeration
     typedef enum logic [1:0] {HIT = 2'b00,
@@ -113,7 +115,7 @@ package cache_struct_pkg;
     endfunction
 
     //Function: Initialize cache memory
-    function void initialize_cache_mem(input cache_set_st cache_mem);
+    function void initialize_cache_mem();
         //Counter variables
         cache_read_cnt = 0;
         cache_write_cnt = 0;
@@ -124,8 +126,6 @@ package cache_struct_pkg;
         begin
             for (int j = 0; j < `NUM_OF_WAYS_OF_ASSOCIATIVITY; j++)
             begin
-                cache_mem[i].cache_line[j].valid = 0;
-                cache_mem[i].cache_line[j].dirty = 0;
                 cache_mem[i].cache_line[j].tag = 'hx;
                 cache_mem[i].cache_line[j].mesi_state = INVALID;
                 cache_mem[i].plru_bits[j] = 'b0;  					// Setting PLRU to 00000000 while initializing
@@ -135,39 +135,39 @@ package cache_struct_pkg;
                 
     //Function: Prints the contents of each valid cache line.
     function void print_cache_mem(input cache_set_st cache_mem);
-        $display("\n-------------------------------------------------------------------");	
-        $display("          CACHE_MEM [SET] [WAY] = [TAG] [MESI STATE]            ");	
-        $display("-------------------------------------------------------------------");
+        $display("\n-----------------------------------------------------------------------------------");	
+        $display("                CACHE_MEM [SET] [WAY] [PLRU Bits]= [TAG] [MESI STATE]              ");	
+        $display("-----------------------------------------------------------------------------------");
         for (int i = 0; i < `NUM_OF_SETS; i++)
         begin
             for (int j = 0; j < `NUM_OF_WAYS_OF_ASSOCIATIVITY; j++)
             begin
-                if(cache_mem[i].cache_line[j].valid == 1)				
-                    $display("CACHE_MEM [%0d]\t[%0d] = [%0h]\t[%0s]", i, j, cache_mem[i].cache_line[j].tag, cache_mem[i].cache_line[j].mesi_state.name);
+                if(cache_mem[i].cache_line[j].mesi_state != INVALID)				
+                    $display("CACHE_MEM [%0d][%0d]\t[%b] = [%0h] \t[%0s]", i, j, cache_mem[i].plru_bits, cache_mem[i].cache_line[j].tag, cache_mem[i].cache_line[j].mesi_state.name);
             end
         end
     endfunction
     
     //Function: Display summary of counts
     function void display_summary();
-        if(real'(cache_read_cnt + cache_write_cnt) != 0.0000)
-            cache_hit_ratio = real'(real'(cache_hit_cnt)/real'(cache_read_cnt + cache_write_cnt));
-        $display("\n-------------------------------------------------------------------");	
-        $display("                            SUMMARY                                ");	
-        $display("-------------------------------------------------------------------");	
-        $display("NUMBER OF CACHE READS\t = %0d", cache_read_cnt);	
-        $display("NUMBER OF CACHE WRITES = %0d", cache_write_cnt);	
-        $display("NUMBER OF CACHE HITS\t = %0d", cache_hit_cnt);	
-        $display("NUMBER OF CACHE MISSES = %0d", cache_miss_cnt);	
-        $display("CACHE HIT RATIO\t = %0.2f %%", cache_hit_ratio*100);	
-        $display("-------------------------------------------------------------------");	
+        if(cache_read_cnt + cache_write_cnt != 0.0000)
+            cache_hit_ratio = (cache_hit_cnt)/(cache_read_cnt + cache_write_cnt);
+        $display("\n-----------------------------------------------------------------------------------");	
+        $display("                                     SUMMARY                                       ");	
+        $display("-----------------------------------------------------------------------------------");	
+        $display("NUMBER OF CACHE READS\t\t = %0d", int'(cache_read_cnt));	
+        $display("NUMBER OF CACHE WRITES\t = %0d", int'(cache_write_cnt));	
+        $display("NUMBER OF CACHE HITS\t\t = %0d", int'(cache_hit_cnt));	
+        $display("NUMBER OF CACHE MISSES\t = %0d", int'(cache_miss_cnt));	
+        $display("CACHE HIT RATIO\t\t = %0f", cache_hit_ratio);	
+        $display("CACHE HIT RATIO PERCENTAGE\t = %0.2f %%", cache_hit_ratio*100);	
+        $display("-----------------------------------------------------------------------------------");	
     endfunction
 
     //Function: PLRU Update logic
     function void update_plru(int w);
 
         update_plru_index = 0;
-        //$display("w = %0d", w);
 
         for(int binary_bit_level = ($clog2(`NUM_OF_WAYS_OF_ASSOCIATIVITY)-1); binary_bit_level >= 0; binary_bit_level--)
         begin
@@ -177,7 +177,6 @@ package cache_struct_pkg;
             begin
                 update_plru_index = (2*update_plru_index) + 1 + plru_bit_shift;
             end
-            //$display("index = %0d", update_plru_index);
         end
 
         display_val(DEBUG, "\nUpdated_PLRU:");
@@ -186,7 +185,8 @@ package cache_struct_pkg;
             if(mode == "NORMAL" && verbosity_in > 2)
                 $write("[%0d]=%b, ", i, update_plru_temp[i]);
         end
-        $display("");
+        if(mode == "NORMAL")
+            display_val(MED, $sformatf("PLRU = %b\n", update_plru_temp));
 
     endfunction: update_plru
 
@@ -220,7 +220,8 @@ package cache_struct_pkg;
                 if(mode == "NORMAL" && verbosity_in > 2)
                     $write("[%0d]=%b, ", i, update_plru_temp[i]);
             end
-            $display("");
+            if(mode == "NORMAL")
+                display_val(MED, $sformatf("PLRU = %b\n", update_plru_temp));
         end
     endfunction
 
@@ -243,14 +244,14 @@ package cache_struct_pkg;
     //Function: Putting snoop result value to other processor (HIT, NOHIT, HITM)
     function void put_snoop_result(input bit [`PHYSICAL_ADDR_BITS-1:0] physical_addr, input snoop_result_e snoop_result);
         if(mode == "NORMAL")
-            display_val(MED, $sformatf("Putting Snoop Result: Address = %h, Put Snoop Result = %s", physical_addr, snoop_result));
+            display_val(MED, $sformatf("Snoop Result: Address = %h, Snoop Result = %s", physical_addr, snoop_result));
     endfunction: put_snoop_result
     
     //Function: Bus operation function
     function void bus_operation(input bus_op_e bus_op, input logic [`PHYSICAL_ADDR_BITS-1:0] physical_addr);
         get_snoop_result(physical_addr, snoop_result);
         if(mode == "NORMAL")
-            display_val(MED, $sformatf("Bus Operation: %s, Address = %h, Get Snoop Result = %s", bus_op, physical_addr, snoop_result));
+            display_val(MED, $sformatf("Bus Operation: %s, Address = %h, Snoop Result = %s", bus_op, physical_addr, snoop_result));
     endfunction: bus_operation
     
     //Function: Used for communication with upper level cache
