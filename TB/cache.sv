@@ -24,20 +24,26 @@ module cache;
     int temp_f;
     logic [`PHYSICAL_ADDR_BITS-1:0] evict_address;
 
+    //Trace file input value variable
+    string cmd_temp;
+    string addr_temp;
+    logic [`TRACE_CMD_LEN-1:0] cmd_temp2;
+    logic [`PHYSICAL_ADDR_BITS-1:0] addr_temp2;
+
     //MESI Signals
     logic PrRd;
     logic PrWr;
     logic BusRd_in;
     logic BusRdX_in;
     logic BusUpgr_in;
+    logic BusWr_in;
     logic BusRd_out;
     logic BusRdX_out;
     logic BusUpgr_out;
     logic flush;
     int saved_i;
 
-    //Declare cache memory
-    cache_set_st cache_mem;
+    
 
     //Function: Read command line arguments
     function void read_cmd_line_args();
@@ -65,10 +71,10 @@ module cache;
         if($value$plusargs("VERBOSITY=%0d", verbosity_in))
         begin
             $cast(verbosity_level, verbosity_in);
-            $display("Verbosity is set to: %0d", verbosity_level);
+            display_val(DEBUG, $sformatf("Verbosity is set to: %0d", verbosity_level));
         end
         else begin
-            verbosity_level = NONE;
+            $cast(verbosity_level, 2);
             $display("Verbosity is set to: %0s", verbosity_level);
         end
     endfunction: read_cmd_line_args
@@ -82,11 +88,11 @@ module cache;
 
         for(int i=0; i<`NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
         begin
-            if(cache_mem[set_val].cache_line[i].valid == 1)
+            if(cache_mem[set_val].cache_line[i].mesi_state != INVALID)
             begin
                 valid_cnt++;
             end
-            if(cache_mem[set_val].cache_line[i].valid !== 1)
+            if(cache_mem[set_val].cache_line[i].mesi_state == INVALID)
             begin
                 invalid_cnt++;
             end
@@ -106,7 +112,8 @@ module cache;
     assign PrRd = (cmd == 0 || cmd == 2);
     assign PrWr = (cmd == 1);
     assign BusRd_in = (cmd == 3);
-    assign BusRdX_in = (cmd == 4 || cmd == 5);
+    assign BusWr_in = (cmd == 4);
+    assign BusRdX_in = (cmd == 5);
     assign BusUpgr_in = (cmd == 6);
 
     function void mesi_state_assignment();
@@ -162,7 +169,7 @@ module cache;
                                 BusRdX_out = 0;
                                 BusUpgr_out = 0;
                                 flush = 0;
-                                cache_mem[set_val].cache_line[saved_i].valid = 0;
+                                cache_mem[set_val].cache_line[saved_i].mesi_state = INVALID;
                                 cache_mem[set_val].cache_line[saved_i].tag = 'hx;
                                 put_snoop_result(address, NOHIT);
                             end
@@ -173,7 +180,6 @@ module cache;
                                 BusRdX_out = 0;
                                 BusUpgr_out = 0;
                                 flush = 0;
-                                cache_mem[set_val].cache_line[saved_i].valid = 0;
                                 cache_mem[set_val].cache_line[saved_i].tag = 'hx;
                             end
                         end
@@ -186,7 +192,7 @@ module cache;
                                 BusRdX_out = 0;
                                 BusUpgr_out = 0;
                                 flush = 0;
-                                message_to_L1_cache(SENDLINE, address);
+                                message_to_L1_cache(SENDLINE, address); 
                             end
                             else if(PrWr)
                             begin
@@ -204,9 +210,11 @@ module cache;
                                 BusRdX_out = 0;
                                 BusUpgr_out = 0;
                                 flush = 0;
-                                cache_mem[set_val].cache_line[saved_i].valid = 0;
                                 cache_mem[set_val].cache_line[saved_i].tag = 'hx;
                                 put_snoop_result(address, HIT);
+                                message_to_L1_cache(GETLINE, address);
+                                bus_operation(WRITE, address);
+                                message_to_L1_cache(INVALIDATELINE, address);
                             end
                             else if(BusRd_in)
                             begin
@@ -216,6 +224,10 @@ module cache;
                                 BusUpgr_out = 0;
                                 flush = 0;
                                 put_snoop_result(address, HIT);
+                            end
+                            else if(BusUpgr_in)
+                            begin
+                                $display("ERROR: Snoop Invalidate Command can't be received in EXCLUSIVE state");
                             end
                         end
 
@@ -255,9 +267,11 @@ module cache;
                                 BusRdX_out = 0;
                                 BusUpgr_out = 0;
                                 flush = 0;
-                                cache_mem[set_val].cache_line[saved_i].valid = 0;
                                 cache_mem[set_val].cache_line[saved_i].tag = 'hx;
                                 put_snoop_result(address, HIT);
+                                message_to_L1_cache(GETLINE, address);
+                                bus_operation(WRITE, address);
+                                message_to_L1_cache(INVALIDATELINE, address);
                             end
                         end
 
@@ -288,6 +302,8 @@ module cache;
                                 BusUpgr_out = 0;
                                 flush = 1;
                                 put_snoop_result(address, HITM);
+                                message_to_L1_cache(GETLINE, address);
+                                bus_operation(WRITE, address);
                             end
                             else if(BusRdX_in)
                             begin
@@ -296,9 +312,14 @@ module cache;
                                 BusRdX_out = 0;
                                 BusUpgr_out = 0;
                                 flush = 1;
-                                cache_mem[set_val].cache_line[saved_i].valid = 0;
                                 cache_mem[set_val].cache_line[saved_i].tag = 'hx;
-                                put_snoop_result(address, HITM);
+                                message_to_L1_cache(GETLINE, address);
+                                bus_operation(WRITE, address);
+                                message_to_L1_cache(INVALIDATELINE, address);
+                            end
+                            else if(BusUpgr_in)
+                            begin
+                                $display("ERROR: Snoop Invalidate Command can't be received in MODIFIED state");
                             end
                         end
             
@@ -308,20 +329,22 @@ module cache;
                             BusRdX_out = 0;
                             BusUpgr_out = 0;
                             flush = 0;
-                            cache_mem[set_val].cache_line[saved_i].valid = 0;
                             cache_mem[set_val].cache_line[saved_i].tag = 'hx;
                         end
         endcase
+        $display("");
         display_val(DEBUG, $sformatf("---------- MESI Function Display ----------"));
         display_val(DEBUG, $sformatf("Saved_i = %0d", saved_i));
         display_val(DEBUG, $sformatf("PrRd = %0d", PrRd));
         display_val(DEBUG, $sformatf("PrWr = %0d", PrWr));
         display_val(MED, $sformatf("PREVIOUS MESI STATE = %s" ,cache_mem[set_val].cache_line[saved_i].mesi_state));
+        //MESI State Assignment
         cache_mem[set_val].cache_line[saved_i].mesi_state = mesi_state_temp;
         display_val(MED, $sformatf("CURRENT MESI STATE = %s" , mesi_state_temp));
         display_val(DEBUG, $sformatf("-------------------------------------------"));
     endfunction: mesi_state_assignment
 
+    //Clock Generator
     initial
     begin
         forever
@@ -344,7 +367,8 @@ module cache;
         if(input_file_open == 0)
         begin
             $warning("File %s doesn't exist in the directory, I'm running with default input file rwims.din", file_name);
-            input_file_open = $fopen($sformatf("../rwims.din",file_name), "r");
+            file_name = "rwims.din";
+            input_file_open = $fopen($sformatf("../%s",file_name), "r");
         end
         output_file_open = $fopen("../output.txt", "w");
 
@@ -354,14 +378,41 @@ module cache;
         $fdisplay(output_file_open, "------------------------------------------------------\n");
 
         //Initialize the cache memory
-        initialize_cache_mem(cache_mem);
+        initialize_cache_mem();
 
         while(!$feof(input_file_open))
         begin
 
             trans_cnt++;
-            //Decode everyline of trace file and store them in cmd and address
-            temp_f = $fscanf(input_file_open, "%h %h", cmd, address);
+            temp_f = $fgets(line, input_file_open);
+
+            if(line == "")
+                break;
+            else
+            begin
+                fork
+                    temp_f = $sscanf(line, "%s %s", cmd_temp, addr_temp);
+                    temp_f = $sscanf(line, "%h %h", cmd_temp2, addr_temp2);
+                join
+            end
+            $display("cmd_temp = %s", cmd_temp);
+
+            if(temp_f > 0 && cmd_temp.len > 1)
+            begin
+                $error("ERROR: Input Tracefile is not having a VALID Format");
+                break;
+            end
+
+            if (temp_f == 1) 
+            begin
+                cmd = cmd_temp2;
+                address = 'hx;
+            end 
+            else if (temp_f == 2) 
+            begin
+                cmd = cmd_temp2;
+                address = addr_temp2;
+            end
 
             //Function call to assign cmd description
             cmd_description = assign_cmd_description(cmd);
@@ -370,7 +421,7 @@ module cache;
             display_val(DEBUG, $sformatf("Address            : %h\n", address));
 
             display_val(LOW, "\n-----------------------------------------------------------------------------------");
-            display_val(LOW, $sformatf("                                TRANSACTION : %0d                                  ", trans_cnt));
+            display_val(LOW, $sformatf("                                TRACE LINE : %0d                                  ", trans_cnt));
             display_val(LOW, "-----------------------------------------------------------------------------------");
             
             //Write to output file
@@ -383,38 +434,35 @@ module cache;
             address_slicing(address);
 
             //Transaction delay (You may use clock edge here)
-            //#(`INTERVAL);
             @(posedge clk);
 
             //0 : read request from L1 data cache
             if(cmd == 0 || cmd == 2)
             begin
                 
-                display_val(MED, "-------------- CPU Read Request --------------\n");
+                display_val(MED, "\n* CPU Read Request *\n");
                 check_for_set_empty_full();
-                tag_matched = 0;                //Initialized the value (It is just for internal logic)
+                tag_matched = 0;                            //Initialized the value (It is just for internal logic)
                 display_val(DEBUG, $sformatf("Addr = %0h, SET_FULL = %0b, SET_EMPTY = %0d", address, set_full, set_empty));
 
                 //For loop - 1 (For READ-HIT and CONFLICT MISSES)
                 for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
                 begin
-                    //display_val(MED, $sformatf("SET_EMPTY = %0d, SET_FULL = %0d", set_empty, set_full));
-                    if(cache_mem[set_val].cache_line[i].valid == 1)           //Check if line is already valid or not, if yes, executing if loop
+                    //Check if line is already valid or not, if yes, executing this if loop
+                    if(cache_mem[set_val].cache_line[i].mesi_state != INVALID)  
                     begin
                         if(set_full == 0 && cache_mem[set_val].cache_line[i].tag == tag_val)
                         begin
                             display_val(MED, $sformatf("\nTAG MATCHED! %0h = %0h", cache_mem[set_val].cache_line[i].tag, tag_val));
                             display_val(MED, $sformatf("READ-HIT for %h at CACHE_MEM [SET=%0d][WAY=%0d]", address, set_val, i));
                             //Upadting PLRU bits
-                            cache_mem[set_val].plru_bits = update_plru_temp;
                             update_plru(i);
+                            cache_mem[set_val].plru_bits = update_plru_temp;
                             //MESI state assignment function call to assign respective mesi states
                             saved_i = i;
                             mesi_state_assignment();
                             display_val(DEBUG, $sformatf("PLRU = %b", cache_mem[set_val].plru_bits));
                             tag_matched = 1;
-                            //cache_hit_cnt++;
-                            //cache_read_cnt++;
                             break;
                         end
                         else if(set_full == 1)
@@ -437,7 +485,7 @@ module cache;
                                 end
                             end
                                 
-                            if(tag_matched == 0 && cache_mem[set_val].cache_line[i].valid == 1 && cache_mem[set_val].cache_line[i].tag != tag_val)
+                            if(tag_matched == 0 && cache_mem[set_val].cache_line[i].mesi_state != INVALID && cache_mem[set_val].cache_line[i].tag != tag_val)
                             begin
                                 display_val(MED, $sformatf("CONFLICT READ-MISS for %h at CACHE_MEM [SET=%0d][WAY=%0d]", address, set_val, i));
                                 //Function call for PLRU Eviction
@@ -448,12 +496,9 @@ module cache;
                                 message_to_L1_cache(EVICTLINE, evict_address);
                                 bus_operation(WRITE, evict_address);
                                 bus_operation(READ, address);
-                                message_to_L1_cache(SENDLINE, address);
                                 //MESI state assignment function call to assign respective mesi states
                                 saved_i = i;
                                 mesi_state_assignment();
-                                //Make the valid bit one and assign tag values
-                                cache_mem[set_val].cache_line[way_out].valid = 1;
                                 cache_mem[set_val].cache_line[way_out].tag = tag_val;
                                 cache_miss_cnt++;
                                 cache_read_cnt++;
@@ -474,14 +519,11 @@ module cache;
                 begin
                     if(tag_matched == 0)
                     begin
-                        if(set_full == 0 && cache_mem[set_val].cache_line[i].valid !== 'h1)
+                        if(set_full == 0 && cache_mem[set_val].cache_line[i].mesi_state == INVALID)
                         begin
                             display_val(MED, $sformatf("\nCOMPULSORY READ-MISS for %h at CACHE_MEM [SET=%0d][WAY=%0d]", address, set_val, i));
-                            //Make the valid bit one and assign tag values
-                            cache_mem[set_val].cache_line[i].valid = 1;
                             cache_mem[set_val].cache_line[i].tag = tag_val;
-                            display_val(MED, $sformatf("cache_mem[%0d].cache_line[%0d].valid = %0d", set_val, i, cache_mem[set_val].cache_line[i].valid));
-                            display_val(MED, $sformatf("cache_mem[%0d].cache_line[%0d].tag = %0h = %0h", set_val, i, cache_mem[set_val].cache_line[i].tag, tag_val));
+                            display_val(DEBUG, $sformatf("cache_mem[%0d].cache_line[%0d].tag = %0h = %0h", set_val, i, cache_mem[set_val].cache_line[i].tag, tag_val));
                             //Upadting PLRU bits
                             update_plru(i);
                             cache_mem[set_val].plru_bits = update_plru_temp;
@@ -501,7 +543,7 @@ module cache;
             else if(cmd == 1)
             begin
 
-                display_val(MED, "-------------- CPU Write Request --------------\n");
+                display_val(MED, "\n* CPU Write Request *\n");
 
                 check_for_set_empty_full();
                 tag_matched = 0;                //Initialized the value (It is just for internal logic)
@@ -510,9 +552,10 @@ module cache;
                 //For loop - 1 (For READ-HIT and CONFLICT MISSES)
                 for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
                 begin
-                    //display_val(MED, $sformatf("SET_EMPTY = %0d, SET_FULL = %0d", set_empty, set_full));
-                    if(cache_mem[set_val].cache_line[i].valid == 1)           //Check if line is already valid or not, if yes, executing if loop
+                    //Check if line is already valid or not, if yes, executing this if loop
+                    if(cache_mem[set_val].cache_line[i].mesi_state != INVALID)  
                     begin
+                        //Write-HIT logic when set is not full
                         if(set_full == 0 && cache_mem[set_val].cache_line[i].tag == tag_val)
                         begin
                             display_val(MED, $sformatf("\nTAG MATCHED! %0h = %0h", cache_mem[set_val].cache_line[i].tag, tag_val));
@@ -525,10 +568,9 @@ module cache;
                             mesi_state_assignment();
                             display_val(DEBUG, $sformatf("PLRU = %b", cache_mem[set_val].plru_bits));
                             tag_matched = 1;
-                            //cache_hit_cnt++;
-                            //cache_write_cnt++;
                             break;
                         end
+                        //Write-HIT logic when set is full
                         else if(set_full == 1)
                         begin
                             for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
@@ -548,25 +590,20 @@ module cache;
                                     break;
                                 end
                             end
-                                
-                            if(tag_matched == 0 && cache_mem[set_val].cache_line[i].valid == 1 && cache_mem[set_val].cache_line[i].tag != tag_val)
+                            
+                            //Conflict/Collision Write-MISS logic
+                            if(tag_matched == 0 && cache_mem[set_val].cache_line[i].mesi_state != INVALID && cache_mem[set_val].cache_line[i].tag != tag_val)
                             begin
                                 display_val(MED, $sformatf("CONFLICT WRITE-MISS for %h at CACHE_MEM [SET=%0d][WAY=%0d]", address, set_val, i));
-                                //Make the valid bit one and assign tag values
                                 //Upadting PLRU bits
                                 victim_plru(update_plru_temp);
                                 cache_mem[set_val].plru_bits = update_plru_temp;
-
                                 //Fetch evict_address
                                 evict_address = {cache_mem[set_val].cache_line[way_out].tag, set_val, 6'hx};
                                 message_to_L1_cache(EVICTLINE, evict_address);
                                 bus_operation(WRITE, evict_address);
                                 bus_operation(RWIM, address);
-                                message_to_L1_cache(SENDLINE, address);
-                                
-                                cache_mem[set_val].cache_line[way_out].valid = 1;
                                 cache_mem[set_val].cache_line[way_out].tag = tag_val;
-                                //MESI state assignment function call to assign respective mesi states
                                 saved_i = i;
                                 mesi_state_assignment();
                                 cache_miss_cnt++;
@@ -588,14 +625,11 @@ module cache;
                 begin
                     if(tag_matched == 0)
                     begin
-                        if(set_full == 0 && cache_mem[set_val].cache_line[i].valid !== 'h1)
+                        if(set_full == 0 && cache_mem[set_val].cache_line[i].mesi_state == INVALID)
                         begin
                             display_val(MED, $sformatf("\nCOMPULSORY WRITE-MISS for %h at CACHE_MEM [SET=%0d][WAY=%0d]", address, set_val, i));
-                            //Make the valid bit one and assign tag values
-                            cache_mem[set_val].cache_line[i].valid = 1;
                             cache_mem[set_val].cache_line[i].tag = tag_val;
-                            display_val(MED, $sformatf("cache_mem[%0d].cache_line[%0d].valid = %0d", set_val, i, cache_mem[set_val].cache_line[i].valid));
-                            display_val(MED, $sformatf("cache_mem[%0d].cache_line[%0d].tag = %0h = %0h", set_val, i, cache_mem[set_val].cache_line[i].tag, tag_val));
+                            display_val(DEBUG, $sformatf("cache_mem[%0d].cache_line[%0d].tag = %0h = %0h", set_val, i, cache_mem[set_val].cache_line[i].tag, tag_val));
                             //Upadting PLRU bits
                             update_plru(i);
                             cache_mem[set_val].plru_bits = update_plru_temp;
@@ -613,54 +647,106 @@ module cache;
 
             else if(cmd == 3)
             begin
-                display_val(MED, "-------------- Snoop Read Request --------------\n");
-                bus_op = READ;
-                // bus_operation(bus_op, address, snoop_result);
+                display_val(MED, "\n* Snoop Read Request *\n");
                 mesi_state_assignment();
-                
+                //tag_matched = 0;
+                // for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
+                // begin
+                //     if(cache_mem[set_val].cache_line[i].tag == tag_val)
+                //     begin
+                //         if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
+                //         begin
+                //             //put_snoop_result(address, HITM);
+                //         end
+                //         else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
+                //         begin
+                //             //put_snoop_result(address, HIT);
+                //         end
+                //         tag_matched = 1;
+                //         mesi_state_assignment();
+                //         break;
+                //     end
+                // end
+                // if(tag_matched == 0)
+                // begin
+                //     mesi_state_assignment();
+                // end
             end
             
             else if(cmd == 4)
             begin
-                display_val(MED, "-------------- Snoop Write Request --------------\n");
-
-                bus_op = WRITE;
-                // bus_operation(bus_op, address, snoop_result);
+                display_val(MED, "\n* Snoop Write Request *\n");
                 mesi_state_assignment();
-                //put_snoop_result(address, snoop_result);
             end
             
             else if(cmd == 5)
             begin
-                display_val(MED, "-------------- Snoop Read with Intent to Modify Request --------------\n");
-
-                bus_op = RWIM;
-                // bus_operation(bus_op, address, snoop_result);
+                display_val(MED, "\n* Snoop Read with Intent to Modify Request *\n");
                 mesi_state_assignment();
-                //put_snoop_result(address, snoop_result);
+                // tag_matched = 0;
+                // for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
+                // begin
+                //     if(cache_mem[set_val].cache_line[i].tag == tag_val)
+                //     begin
+                //         if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
+                //         begin
+                //             //put_snoop_result(address, HITM);
+                //         end
+                //         else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
+                //         begin
+                //             //put_snoop_result(address, HIT);
+                //         end
+                //         tag_matched = 1;
+                //         mesi_state_assignment();
+                //         break;
+                //     end
+                // end
+                // if(tag_matched == 0)
+                // begin
+                //     //put_snoop_result(address, NOHIT);
+                //     mesi_state_assignment();
+                // end
             end
             
             else if(cmd == 6)
             begin
-                display_val(MED, "-------------- Snoop Invalidate Command --------------\n");
-
-                bus_op = INVALIDATE;
-                // bus_operation(bus_op, address, snoop_result);
+                display_val(MED, "\n* Snoop Invalidate Command *\n");
                 mesi_state_assignment();
-                //put_snoop_result(address, snoop_result);
+
+                // tag_matched = 0;
+                // for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
+                // begin
+                //     if(cache_mem[set_val].cache_line[i].tag == tag_val)
+                //     begin
+                //         if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
+                //         begin
+                //             //put_snoop_result(address, HITM);
+                //         end
+                //         else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
+                //         begin
+                //             //put_snoop_result(address, HIT);
+                //         end 
+                //         tag_matched = 1;
+                //         mesi_state_assignment();
+                //         break;
+                //     end
+                // end
+                // if(tag_matched == 0)
+                // begin
+                //     //put_snoop_result(address, NOHIT);
+                //     mesi_state_assignment();
+                // end
             end
 
             else if(cmd == 8)
             begin
-                display_val(MED, "-------------- Clear the Cache and Reset all State --------------\n");
-
-                initialize_cache_mem(cache_mem);
+                display_val(MED, "\n* Clear the Cache and Reset all State *\n");
+                initialize_cache_mem();
             end
             
             else if(cmd == 9)
             begin
-                display_val(MED, "-------------- Print Contents and State of Each Valid Cache Line --------------\n");
-
+                display_val(MED, "\n* Print Contents and State of Each Valid Cache Line *\n");
                 print_cache_mem(cache_mem);
             end
         end
@@ -669,7 +755,7 @@ module cache;
 
     final
     begin
-        print_cache_mem(cache_mem);
+        //print_cache_mem(cache_mem);
         display_summary();
     end
 
