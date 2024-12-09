@@ -395,7 +395,7 @@ module cache;
                     temp_f = $sscanf(line, "%h %h", cmd_temp2, addr_temp2);
                 join
             end
-            $display("cmd_temp = %s", cmd_temp);
+            //$display("cmd_temp = %s", cmd_temp);
 
             if(temp_f > 0 && cmd_temp.len > 1)
             begin
