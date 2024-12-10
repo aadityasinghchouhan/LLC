@@ -23,9 +23,9 @@ package cache_struct_pkg;
 
     //Enum declaration for MESI Protocol States
     typedef enum bit [1:0] {INVALID = 2'b00,
-                              SHARED = 2'b01,
-                              EXCLUSIVE = 2'b10,
-                              MODIFIED = 2'b11} mesi_states_e;
+                            SHARED = 2'b01,
+                            EXCLUSIVE = 2'b10,
+                            MODIFIED = 2'b11} mesi_states_e;
 
     //Variable declaration
     mesi_states_e mesi_state_temp;
@@ -33,8 +33,7 @@ package cache_struct_pkg;
 
     //One-cache line contains: Valid bit, Dirty bit, Tag bit, MESI State
     //Let's declare user-defined structure for one cache line
-    typedef struct {logic dirty;
-                    mesi_states_e mesi_state;
+    typedef struct {mesi_states_e mesi_state;
                     logic [`TAG_BITS-1:0] tag;} cache_line_st;
 
     //One-set contains: (16-1)=15 PLRU bits, 16 cache-lines 

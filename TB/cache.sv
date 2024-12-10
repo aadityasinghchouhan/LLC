@@ -391,6 +391,7 @@ module cache;
             else
             begin
                 fork
+                    //Fetching trace line parallely for bad trace checking: Added by Manank Bhavsar
                     temp_f = $sscanf(line, "%s %s", cmd_temp, addr_temp);
                     temp_f = $sscanf(line, "%h %h", cmd_temp2, addr_temp2);
                 join
@@ -648,29 +649,29 @@ module cache;
             else if(cmd == 3)
             begin
                 display_val(MED, "\n* Snoop Read Request *\n");
-                mesi_state_assignment();
-                //tag_matched = 0;
-                // for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
-                // begin
-                //     if(cache_mem[set_val].cache_line[i].tag == tag_val)
-                //     begin
-                //         if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
-                //         begin
-                //             //put_snoop_result(address, HITM);
-                //         end
-                //         else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
-                //         begin
-                //             //put_snoop_result(address, HIT);
-                //         end
-                //         tag_matched = 1;
-                //         mesi_state_assignment();
-                //         break;
-                //     end
-                // end
-                // if(tag_matched == 0)
-                // begin
-                //     mesi_state_assignment();
-                // end
+                tag_matched = 0;
+                for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
+                begin
+                    if(cache_mem[set_val].cache_line[i].tag == tag_val)
+                    begin
+                        if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
+                        begin
+                            //put_snoop_result(address, HITM);
+                        end
+                        else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
+                        begin
+                            //put_snoop_result(address, HIT);
+                        end
+                        tag_matched = 1;
+                        saved_i = i;
+                        mesi_state_assignment();
+                        break;
+                    end
+                end
+                if(tag_matched == 0)
+                begin
+                    mesi_state_assignment();
+                end
             end
             
             else if(cmd == 4)
@@ -682,60 +683,59 @@ module cache;
             else if(cmd == 5)
             begin
                 display_val(MED, "\n* Snoop Read with Intent to Modify Request *\n");
-                mesi_state_assignment();
-                // tag_matched = 0;
-                // for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
-                // begin
-                //     if(cache_mem[set_val].cache_line[i].tag == tag_val)
-                //     begin
-                //         if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
-                //         begin
-                //             //put_snoop_result(address, HITM);
-                //         end
-                //         else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
-                //         begin
-                //             //put_snoop_result(address, HIT);
-                //         end
-                //         tag_matched = 1;
-                //         mesi_state_assignment();
-                //         break;
-                //     end
-                // end
-                // if(tag_matched == 0)
-                // begin
-                //     //put_snoop_result(address, NOHIT);
-                //     mesi_state_assignment();
-                // end
+                //mesi_state_assignment();
+                tag_matched = 0;
+                for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
+                begin
+                    if(cache_mem[set_val].cache_line[i].tag == tag_val)
+                    begin
+                        if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
+                        begin
+                            //put_snoop_result(address, HITM);
+                        end
+                        else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
+                        begin
+                            //put_snoop_result(address, HIT);
+                        end
+                        tag_matched = 1;
+                        saved_i = i;
+                        mesi_state_assignment();
+                        break;
+                    end
+                end
+                if(tag_matched == 0)
+                begin
+                    mesi_state_assignment();
+                end
             end
             
             else if(cmd == 6)
             begin
                 display_val(MED, "\n* Snoop Invalidate Command *\n");
-                mesi_state_assignment();
-
-                // tag_matched = 0;
-                // for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
-                // begin
-                //     if(cache_mem[set_val].cache_line[i].tag == tag_val)
-                //     begin
-                //         if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
-                //         begin
-                //             //put_snoop_result(address, HITM);
-                //         end
-                //         else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
-                //         begin
-                //             //put_snoop_result(address, HIT);
-                //         end 
-                //         tag_matched = 1;
-                //         mesi_state_assignment();
-                //         break;
-                //     end
-                // end
-                // if(tag_matched == 0)
-                // begin
-                //     //put_snoop_result(address, NOHIT);
-                //     mesi_state_assignment();
-                // end
+                //mesi_state_assignment();
+                tag_matched = 0;
+                for(int i=0; i < `NUM_OF_WAYS_OF_ASSOCIATIVITY; i++)
+                begin
+                    if(cache_mem[set_val].cache_line[i].tag == tag_val)
+                    begin
+                        if(cache_mem[set_val].cache_line[i].mesi_state == MODIFIED)
+                        begin
+                            //put_snoop_result(address, HITM);
+                        end
+                        else if(cache_mem[set_val].cache_line[i].mesi_state == SHARED || cache_mem[set_val].cache_line[i].mesi_state == EXCLUSIVE)
+                        begin
+                            //put_snoop_result(address, HIT);
+                        end 
+                        tag_matched = 1;
+                        saved_i = i;
+                        mesi_state_assignment();
+                        break;
+                    end
+                end
+                if(tag_matched == 0)
+                begin
+                    mesi_state_assignment();
+                end
             end
 
             else if(cmd == 8)
